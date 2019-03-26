@@ -1,0 +1,153 @@
+package Model;
+
+import java.util.Random;
+
+public class Processo implements Comparable<Processo> {
+    private String nome;
+    private Integer id;
+    private Status status;
+    private Prioridade prioridade;
+    private String descrição;
+    //Tempo total que levaria para executar o processo, considerando que houve uma pré-execução para determinar esse tempo. Perguntar Érico.
+    private Integer tempoTotal;
+    private Integer tempoRestante;
+    private Integer tempoExecutando = 0;
+
+    public Processo(int id) {
+        this.id = id;
+        this.setarNomeDescrição();
+        this.status = Status.PRONTO;
+        this.prioridade = randomPrioridade();
+        this.tempoTotal = randomTempoTotal();
+        this.tempoRestante = tempoTotal;
+    }
+
+    private static Prioridade randomPrioridade() {
+        int randomica = new Random().nextInt(3) + 1;
+        switch (randomica) {
+            case 1:
+                return Prioridade.BAIXA;
+            case 2:
+                return Prioridade.NORMAL;
+            case 3:
+                return Prioridade.ALTA;
+        }
+        return null;
+    }
+
+    private static Integer randomTempoTotal() {
+        Integer random = new Random().nextInt(17) + 4;
+        return random;
+    }
+
+    private void setarNomeDescrição() {
+        String[][] matrizString = {
+                {"Chrome", "Browser"},
+                {"IntelliJ", "IDE"},
+                {"Blitz", "eSports"},
+                {"Discord", "VoiceChat"},
+                {"LightShot", "Screenshot"},
+                {"Word", "Editor de texto"},
+                {"Xbox", "MasterRace"},
+                {"Wargroove", "Turn Strategy"},
+                {"Halo Wars", "RTS"},
+                {"Halo Wars 02", "RTS"},
+                {"Mario 64", "GOAT"}
+        };
+        int escolha = new Random().nextInt(matrizString.length);
+        this.nome = matrizString[escolha][0];
+        this.descrição = matrizString[escolha][1];
+    }
+
+    void zerarTempo() {
+        this.tempoExecutando = 0;
+    }
+
+    void incrementarTempo(int segundos) {
+        this.tempoExecutando += segundos;
+    }
+
+    @Override
+    public String toString() {
+        return "Processo{" +
+                "nome='" + nome + '\'' +
+                ", id=" + id +
+                ", status=" + status +
+                ", prioridade=" + prioridade +
+                ", descrição='" + descrição + '\'' +
+                ", tempoTotal=" + tempoTotal +
+                ", tempoRestante=" + tempoRestante +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Processo processo) {
+        //Compara os tempo totais para decidir qual processo é maior
+        return (Integer.compare(this.getTempoTotal(), processo.getTempoTotal()));
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    void setStatus(Status status) {
+        this.status = status;
+    }
+
+    Prioridade getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(Prioridade prioridade) {
+        this.prioridade = prioridade;
+    }
+
+    public String getDescrição() {
+        return descrição;
+    }
+
+    public void setDescrição(String descrição) {
+        this.descrição = descrição;
+    }
+
+    Integer getTempoTotal() {
+        return tempoTotal;
+    }
+
+    public void setTempoTotal(Integer tempoTotal) {
+        this.tempoTotal = tempoTotal;
+    }
+
+    Integer getTempoRestante() {
+        return tempoRestante;
+    }
+
+    void setTempoRestante(Integer tempoRestante) {
+        this.tempoRestante = tempoRestante;
+    }
+
+    Integer getTempoExecutando() {
+        return tempoExecutando;
+    }
+
+    public void setTempoExecutando(Integer tempoExecutando) {
+        this.tempoExecutando = tempoExecutando;
+    }
+
+}
