@@ -3,6 +3,7 @@ package Controller;
 import Model.*;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -109,20 +109,22 @@ public class Controller implements Initializable {
         tableColunaExecTotal.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoTotal"));
         tableColunaExecRestante.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoRestante"));
         tableColunaDescr.setCellValueFactory(new PropertyValueFactory<Processo, String>("Descrição"));
-
         //Timer atualizador do tableview, 1s em 1s
         tableAtualizador = new Timer();
     }
 
     public void igniteEmul(ActionEvent actionEvent) {
         String algoritmo = comboBoxAlgoritmo.getValue().toString();
-        switch (algoritmo){
-            case "SJF" : processador = new SJF(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()),0);
-            break;
-            case "Round Robin" : processador = new RR(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()));
-            break;
-            case "Fila de Prioridade" : processador = new FilaPrioridade(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()));
-            break;
+        switch (algoritmo) {
+            case "SJF":
+                processador = new SJF(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), 0);
+                break;
+            case "Round Robin":
+                processador = new RR(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()));
+                break;
+            case "Fila de Prioridade":
+                processador = new FilaPrioridade(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()));
+                break;
         }
         //Bindando lista de processos do processador a tableView
         processosTable = FXCollections.observableArrayList(processador.getTodosProcessos());
@@ -132,29 +134,36 @@ public class Controller implements Initializable {
         tableAtualizador.schedule(new TimerTask() {
             @Override
             public void run() {
+                //TODO Extrair esse código daqui
                 processosTable = FXCollections.observableArrayList(processador.getTodosProcessos());
                 tableMaster.setItems(processosTable);
                 tableMaster.refresh();
             }
-        }, 0,1000);
+        }, 1000, 100);
     }
 
     public void addProcesso(ActionEvent actionEvent) {
         int idProcesso = processador.getMaiorId() + 1;
         Processo novo = new Processo(idProcesso);
+        novo.setNovo(true);
         processador.addNovoProcesso(novo);
+        processosTable = FXCollections.observableArrayList(processador.getTodosProcessos());
+        tableMaster.setItems(processosTable);
+        //Iluminar processo novo
+//            tableMaster.getItems().get(tableMaster.getItems().indexOf(novo));
     }
 
-    //Todo Em mundo ideal conseguir pausar todas as Threads
-    public void pausar(ActionEvent actionEvent){
-        processador.pause();
-    }
-    //Todo Resumir todas as Threads
-    public void resumir(ActionEvent actionEvent){
-        Thread.currentThread().interrupt();
-    }
-    //Todo Fechar de vez todas as Threads
-    public void parar(ActionEvent actionEvent){
-        Thread.currentThread().interrupt();
-    }
+
+//        //Todo Em mundo ideal conseguir pausar todas as Threads
+//        public void pausar (ActionEvent actionEvent){
+//            processador.pause();
+//        }
+//        //Todo Resumir todas as Threads
+//        public void resumir (ActionEvent actionEvent){
+//            Thread.currentThread().interrupt();
+//        }
+//        //Todo Fechar de vez todas as Threads
+//        public void parar (ActionEvent actionEvent){
+//            Thread.currentThread().interrupt();
+//        }
 }

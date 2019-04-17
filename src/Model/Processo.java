@@ -12,6 +12,7 @@ public class Processo implements Comparable<Processo> {
     private Integer tempoTotal;
     private Integer tempoRestante;
     private Integer tempoExecutando = 0;
+    private boolean novo = false;
 
     public Processo(int id) {
         this.id = id;
@@ -38,6 +39,14 @@ public class Processo implements Comparable<Processo> {
     private static Integer randomTempoTotal() {
         Integer random = new Random().nextInt(17) + 4;
         return random;
+    }
+
+    public boolean isNovo() {
+        return novo;
+    }
+
+    public void setNovo(boolean novo) {
+        this.novo = novo;
     }
 
     private void setarNomeDescrição() {
@@ -94,7 +103,7 @@ public class Processo implements Comparable<Processo> {
         this.nome = nome;
     }
 
-    Integer getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -106,11 +115,11 @@ public class Processo implements Comparable<Processo> {
         return status;
     }
 
-    void setStatus(Status status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    Prioridade getPrioridade() {
+    public Prioridade getPrioridade() {
         return prioridade;
     }
 
@@ -126,7 +135,7 @@ public class Processo implements Comparable<Processo> {
         this.descrição = descrição;
     }
 
-    Integer getTempoTotal() {
+    public Integer getTempoTotal() {
         return tempoTotal;
     }
 
@@ -134,15 +143,15 @@ public class Processo implements Comparable<Processo> {
         this.tempoTotal = tempoTotal;
     }
 
-    Integer getTempoRestante() {
+    public Integer getTempoRestante() {
         return tempoRestante;
     }
 
-    void setTempoRestante(Integer tempoRestante) {
+    public void setTempoRestante(Integer tempoRestante) {
         this.tempoRestante = tempoRestante;
     }
 
-    Integer getTempoExecutando() {
+    public Integer getTempoExecutando() {
         return tempoExecutando;
     }
 

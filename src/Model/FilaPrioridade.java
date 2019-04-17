@@ -26,7 +26,7 @@ public class FilaPrioridade extends Processador {
 
     //TODO Rever código para ter certeza que não estou me repetindo
     @Override
-    public void run() {
+    synchronized public void run() {
         Timer timerRR = new Timer();
         timerRR.schedule(new TimerTask() {
             @Override
@@ -38,19 +38,19 @@ public class FilaPrioridade extends Processador {
                     //TODO Preencher núcleos vazios está correto
                     if (getNúcleos().get(r).processo == null) {
                         //Percorro a lista de aptos
-                        for (int v = 0; v < getAptos().size(); v++) {
+                        for (int v = 0; v < getProcessosAptos().size(); v++) {
 //                            Vai buscar na fila de aptos o processo com a prioridade controle
-                            if (getAptos().get(v).getPrioridade() == controle) {
+                            if (getProcessosAptos().get(v).getPrioridade() == controle) {
                                 achouProcesso = true;
                                 //Achou o processo com prioridade correta, adiciona ao núcleo e remove dos Aptos
-                                getNúcleos().get(r).setProcesso(getAptos().get(v));
-                                getAptos().remove(v);
+                                getNúcleos().get(r).setProcesso(getProcessosAptos().get(v));
+                                getProcessosAptos().remove(v);
                                 iteraControle();
                                 //Saio do Loop
-                                v = getAptos().size();
+                                v = getProcessosAptos().size();
                             }
                             //Não achei o processo com a prioridade especificada
-                            else if (v == getAptos().size() - 1) {
+                            else if (v == getProcessosAptos().size() - 1) {
                                 //Mudo a prioridade e reseto a lista
                                 iteraControle();
                                 v = 0;
@@ -62,20 +62,20 @@ public class FilaPrioridade extends Processador {
                         //Checa se o processo já terminou de executar
                         if (getNúcleos().get(r).processo.getTempoRestante() <= 0) {
                             //Checa se ainda existem processos na lista de aptos
-                            if (getAptos().size() != 0) {
-                                for (int v = 0; v < getAptos().size(); v++) {
+                            if (getProcessosAptos().size() != 0) {
+                                for (int v = 0; v < getProcessosAptos().size(); v++) {
                                     //Vai buscar na fila de aptos o processo com a prioridade controle
-                                    if (getAptos().get(v).getPrioridade() == controle) {
+                                    if (getProcessosAptos().get(v).getPrioridade() == controle) {
                                         achouProcesso = true;
                                         //Achou o processo com prioridade correta, adiciona ao núcleo e remove dos Aptos
-                                        getNúcleos().get(r).setProcesso(getAptos().get(v));
-                                        getAptos().remove(v);
+                                        getNúcleos().get(r).setProcesso(getProcessosAptos().get(v));
+                                        getProcessosAptos().remove(v);
                                         iteraControle();
                                         //Saio do Loop
-                                        v = getAptos().size();
+                                        v = getProcessosAptos().size();
                                     }
                                     //Não achei o processo com a prioridade especificada
-                                    else if (v == getAptos().size() - 1) {
+                                    else if (v == getProcessosAptos().size() - 1) {
                                         //Mudo a prioridade e reseto a lista
                                         iteraControle();
                                         v = 0;
@@ -89,21 +89,21 @@ public class FilaPrioridade extends Processador {
                             if (getNúcleos().get(r).processo.getTempoExecutando() >= getQuantum()) {
                                 //Retorna o processo a fila de aptos
                                 getNúcleos().get(r).processo.setStatus(Status.ESPERANDO);
-                                getAptos().add(getNúcleos().get(r).processo);
-                                if (getAptos().size() != 0) {
-                                    for (int v = 0; v < getAptos().size(); v++) {
+                                getProcessosAptos().add(getNúcleos().get(r).processo);
+                                if (getProcessosAptos().size() != 0) {
+                                    for (int v = 0; v < getProcessosAptos().size(); v++) {
                                         //Vai buscar na fila de aptos o processo com a prioridade controle
-                                        if (getAptos().get(v).getPrioridade() == controle) {
+                                        if (getProcessosAptos().get(v).getPrioridade() == controle) {
                                             achouProcesso = true;
                                             //Achou o processo com prioridade correta, adiciona ao núcleo e remove dos Aptos
-                                            getNúcleos().get(r).setProcesso(getAptos().get(v));
-                                            getAptos().remove(v);
+                                            getNúcleos().get(r).setProcesso(getProcessosAptos().get(v));
+                                            getProcessosAptos().remove(v);
                                             iteraControle();
                                             //Saio do Loop
-                                            v = getAptos().size();
+                                            v = getProcessosAptos().size();
                                         }
                                         //Não achei o processo com a prioridade especificada
-                                        else if (v == getAptos().size() - 1) {
+                                        else if (v == getProcessosAptos().size() - 1) {
                                             //Mudo a prioridade e reseto a lista
                                             iteraControle();
                                             v = 0;
@@ -115,7 +115,7 @@ public class FilaPrioridade extends Processador {
                     }
                 }
             }
-        }, 1000, 1000);
+        }, 1000, 10);
         super.run();
     }
 

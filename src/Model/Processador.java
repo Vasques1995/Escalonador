@@ -1,5 +1,6 @@
 package Model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -7,9 +8,10 @@ import java.util.TimerTask;
 public class Processador extends TimerTask {
     ArrayList<Núcleo> núcleos;
     private int quantum;
-    private ArrayList<Processo> aptos = new ArrayList<>();
+    ArrayList<Processo> processosAptos = new ArrayList<>();
+    ArrayList<Processo> processosTerminados = new ArrayList<>();
 
-    //TimerTask que administra o tempo de execução total e restante dos aptos nos núcleos
+    //TimerTask que administra o tempo de execução total e restante dos processosAptos nos núcleos
     TimerTask passaTempo = new TimerTask() {
         @Override
         public void run() {
@@ -20,8 +22,11 @@ public class Processador extends TimerTask {
                     //Adiciona um segundo ao tempo em que ele já foi executado
                     nucleo.getProcesso().incrementarTempo(1);
                 }
-                if (nucleo != null && nucleo.processo != null && nucleo.processo.getTempoRestante() <= 0)
+                if (nucleo != null && nucleo.processo != null && nucleo.processo.getTempoRestante() <= 0) {
+                    //Caso o processo tenha terminado altera o status e adiciona na lista de processos terminados
                     nucleo.getProcesso().setStatus(Status.TERMINADO);
+                    processosTerminados.add(nucleo.getProcesso());
+                }
             }
         }
     };
@@ -41,7 +46,7 @@ public class Processador extends TimerTask {
     }
 
     @Override
-    public void run() {
+    synchronized public void run() {
         //Passagem de tempo dentro do núcleo
         Timer timer = new Timer();
         timer.schedule(passaTempo, 1000, 1000);
@@ -50,7 +55,7 @@ public class Processador extends TimerTask {
     private void geradorProcesso(int nProcessos) {
         for (int i = 0; i < nProcessos; i++) {
             Processo processo = new Processo(i);
-            aptos.add(processo);
+            processosAptos.add(processo);
         }
     }
 
@@ -64,21 +69,39 @@ public class Processador extends TimerTask {
         return auxiliar;
     }
 
-    public ArrayList<Processo> getTodosProcessos() {
+    synchronized public ArrayList<Processo> getTodosProcessos() {
         ArrayList<Processo> todos = new ArrayList<>();
         for (Núcleo nucleo : núcleos) {
             if (nucleo != null && nucleo.processo != null)
                 todos.add(nucleo.getProcesso());
         }
-        todos.addAll(aptos);
+        todos.addAll(processosAptos);
         return todos;
     }
 
+    public ArrayList<Processo> getProcessosTerminados() {
+        return processosTerminados;
+    }
+
+    public void setProcessosTerminados(ArrayList<Processo> processosTerminados) {
+        this.processosTerminados = processosTerminados;
+    }
+
+    //TODO Isso parece mto errado, pensar melhor dps
+    public ArrayList<Processo> getProcessosNucleo() {
+        ArrayList<Processo> processosNucleo = new ArrayList<>();
+        for (Núcleo nucleo : núcleos) {
+            processosNucleo.add(nucleo.getProcesso());
+        }
+        return processosNucleo;
+    }
+
     //Todo Em mundo ideal conseguir pausar todas as Threads
-    public void pause() { }
+    public void pause() {
+    }
 
     public void addNovoProcesso(Processo processoNovo) {
-        aptos.add(processoNovo);
+        processosAptos.add(processoNovo);
     }
 
     int getQuantum() {
@@ -89,12 +112,12 @@ public class Processador extends TimerTask {
         this.quantum = quantum;
     }
 
-    ArrayList<Processo> getAptos() {
-        return aptos;
+    public ArrayList<Processo> getProcessosAptos() {
+        return processosAptos;
     }
 
-    public void setAptos(ArrayList<Processo> aptos) {
-        this.aptos = aptos;
+    public void setProcessosAptos(ArrayList<Processo> processosAptos) {
+        this.processosAptos = processosAptos;
     }
 
     ArrayList<Núcleo> getNúcleos() {

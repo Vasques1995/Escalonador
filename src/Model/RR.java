@@ -1,6 +1,5 @@
 package Model;
 
-import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,14 +12,14 @@ public class RR extends Processador {
     void preencherNucleos() {
         for (int r = 0; r < getNúcleos().size(); r++) {
             //Adiciona o primeiro processo da fila de aptos no núcleo
-            getNúcleos().get(r).setProcesso(getAptos().get(0));
+            getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
             //Remove o dito processo da fila de aptos
-            getAptos().remove(0);
+            getProcessosAptos().remove(0);
         }
     }
 
     @Override
-    public void run() {
+    synchronized public void run() {
         Timer timerRR = new Timer();
         timerRR.schedule(new TimerTask() {
             @Override
@@ -30,20 +29,20 @@ public class RR extends Processador {
                     //Se o núcleo estiver vazio
                     if (getNúcleos().get(r).processo == null) {
                         //Caso o núcleo esteja vazio, insiro o primeiro processo da fila de aptos
-                        getNúcleos().get(r).setProcesso(getAptos().get(0));
+                        getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
                         //Removo o processo da fila de aptos
-                        getAptos().remove(0);
+                        getProcessosAptos().remove(0);
                     }
                     //Caso o nucleo não esteja vazio
                     else {
                         //Checa se o processo já terminou de executar
                         if (getNúcleos().get(r).processo.getTempoRestante() <= 0) {
                             //Insere o primeiro processo da fila de aptos
-                            if (getAptos().size() != 0) {
+                            if (getProcessosAptos().size() != 0) {
                                 //Preenche com o primeiro processo na lista de aptos
-                                getNúcleos().get(r).setProcesso(getAptos().get(0));
+                                getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
                                 //Remove da lista de Aptos
-                                getAptos().remove(0);
+                                getProcessosAptos().remove(0);
                             }
                         }
                         //Processo não terminou de executar
@@ -52,17 +51,17 @@ public class RR extends Processador {
                             if (getNúcleos().get(r).processo.getTempoExecutando() >= getQuantum()) {
 //                          Retorna o processo a fila de aptos
                                 getNúcleos().get(r).processo.setStatus(Status.ESPERANDO);
-                                getAptos().add(getNúcleos().get(r).processo);
+                                getProcessosAptos().add(getNúcleos().get(r).processo);
                                 //Insiro o primeiro processo da fila de aptos
-                                getNúcleos().get(r).setProcesso(getAptos().get(0));
+                                getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
                                 //Removo o processo da fila de aptos
-                                getAptos().remove(0);
+                                getProcessosAptos().remove(0);
                             }
                         }
                     }
                 }
             }
-        }, 1000, 1000);
+        }, 1000, 10);
         super.run();
     }
 }

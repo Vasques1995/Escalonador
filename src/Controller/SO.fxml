@@ -52,9 +52,9 @@
                <effect>
                   <DropShadow blurType="GAUSSIAN" color="#00000098" height="1.0" offsetX="-1.0" offsetY="1.0" radius="0.0" spread="0.1" width="0.0" />
                </effect></Button>
-            <Button fx:id="btn_pausar" mnemonicParsing="false" onAction="#pausar" text="Pausar" />
-            <Button fx:id="btn_resumo" mnemonicParsing="false" onAction="#resumir" text="Resumir" />
-            <Button fx:id="btn_parar" mnemonicParsing="false" onAction="#parar" text="Parar" />
+            <!--<Button fx:id="btn_pausar" mnemonicParsing="false" onAction="#pausar" text="Pausar" />-->
+            <!--<Button fx:id="btn_resumo" mnemonicParsing="false" onAction="#resumir" text="Resumir" />-->
+            <!--<Button fx:id="btn_parar" mnemonicParsing="false" onAction="#parar" text="Parar" />-->
         </items>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

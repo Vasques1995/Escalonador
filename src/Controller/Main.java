@@ -15,7 +15,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("SO.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("SO2.fxml"));
         primaryStage.setTitle("Hello JavaFX");
         primaryStage.setScene(new Scene(root, 640, 480));
         primaryStage.show();
@@ -24,18 +24,12 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
 
-//        ArrayList<Processo> processos = new ArrayList<>();
-//        for (int r = 0; r < 10; r++) {
-//            Processo processo = new Processo(r);
-//            processos.add(processo);
-//            System.out.println(processo.toString());
-//        }
-//        System.out.println("--------------------------------------------");
-//        Collections.sort(processos);
-//        for (int v = 0; v < 10; v++) {
-//            System.out.println(processos.get(v).toString());
-//        }
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        System.exit(0);
     }
 }
 //Fonte de ajuda https://github.com/douglasrafael/Escalonador
