@@ -148,6 +148,7 @@ public class Controller2 implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+//        comboBoxAlgoritmo.
         //Desabilitar o Quantum caso o algoritmo selecionado seja o SJF
         textQuantum.disableProperty().bind((comboBoxAlgoritmo.valueProperty().isNull()).or(Bindings.createBooleanBinding(() -> comboBoxAlgoritmo.valueProperty().getValue().equals("SJF"), comboBoxAlgoritmo.valueProperty())));
         //Aceitando somente números

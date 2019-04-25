@@ -5,7 +5,8 @@ import static Model.Status.EXECUTANDO;
 class Núcleo {
     Processo processo;
 
-    Núcleo() { }
+    Núcleo() {
+    }
 
     Núcleo(Processo processo) {
         processo.setStatus(EXECUTANDO);
@@ -17,8 +18,13 @@ class Núcleo {
     }
 
     void setProcesso(Processo processo) {
-        processo.setStatus(EXECUTANDO);
-        processo.zerarTempo();
-        this.processo = processo;
+        if (processo != null) {
+            processo.setStatus(EXECUTANDO);
+            processo.zerarTempo();
+            this.processo = processo;
+        }
+        else {
+            this.processo = null;
+        }
     }
 }

@@ -42,7 +42,7 @@ public class SJF extends Processador {
             public void run() {
                 ordenarAptos();
                 for (int r = 0; r < getNúcleos().size(); r++) {
-                    //Checa se o núcleo está preenchdio
+                    //Checa se o núcleo está preenchido
                     if (getNúcleos().get(r).getProcesso() != null) {
                         //Checa se o processo acabou
                         if (getNúcleos().get(r).getProcesso().getTempoRestante() <= 0) {
@@ -53,12 +53,23 @@ public class SJF extends Processador {
                                 //Remove o dito processo da lista de aptos
                                 getProcessosAptos().remove(0);
                             }
+                            //O processo acabou e não tem mais processos nos aptos
+                            else {
+                                System.out.println("SJF: Núcleo preenchido com processo que terminou de executar");
+                                getNúcleos().get(r).setProcesso(null);
+                            }
                         }
                     } else {
-                        //Caso o núcleo esteja vazio, preenche com o primeiro processo na lista de aptos
-                        getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
-                        //Removo o processo que da fila de aptos
-                        getProcessosAptos().remove(0);
+                        if (getProcessosAptos().size() != 0) {
+                            //Preenche com o primeiro processo na lista de aptos
+                            getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
+                            //Remove o dito processo da lista de aptos
+                            getProcessosAptos().remove(0);
+                        }
+//                        //Caso o núcleo esteja vazio, preenche com o primeiro processo na lista de aptos
+//                        getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
+//                        //Removo o processo que da fila de aptos
+//                        getProcessosAptos().remove(0);
                     }
                 }
             }

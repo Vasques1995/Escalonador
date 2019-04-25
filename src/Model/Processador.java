@@ -12,6 +12,7 @@ public class Processador extends TimerTask {
     ArrayList<Processo> processosTerminados = new ArrayList<>();
 
     //TimerTask que administra o tempo de execução total e restante dos processosAptos nos núcleos
+    //TODO Condição de Parada
     TimerTask passaTempo = new TimerTask() {
         @Override
         public void run() {
@@ -22,6 +23,7 @@ public class Processador extends TimerTask {
                     //Adiciona um segundo ao tempo em que ele já foi executado
                     nucleo.getProcesso().incrementarTempo(1);
                 }
+                //TODO Melhorar lógica de processos terminados
                 if (nucleo != null && nucleo.processo != null && nucleo.processo.getTempoRestante() <= 0) {
                     //Caso o processo tenha terminado altera o status e adiciona na lista de processos terminados
                     nucleo.getProcesso().setStatus(Status.TERMINADO);

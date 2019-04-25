@@ -28,10 +28,12 @@ public class RR extends Processador {
                 for (int r = 0; r < getNúcleos().size(); r++) {
                     //Se o núcleo estiver vazio
                     if (getNúcleos().get(r).processo == null) {
-                        //Caso o núcleo esteja vazio, insiro o primeiro processo da fila de aptos
-                        getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
-                        //Removo o processo da fila de aptos
-                        getProcessosAptos().remove(0);
+                        if (getProcessosAptos().size() != 0) {
+                            //Caso o núcleo esteja vazio, insiro o primeiro processo da fila de aptos
+                            getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
+                            //Removo o processo da fila de aptos
+                            getProcessosAptos().remove(0);
+                        }
                     }
                     //Caso o nucleo não esteja vazio
                     else {
@@ -43,6 +45,9 @@ public class RR extends Processador {
                                 getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
                                 //Remove da lista de Aptos
                                 getProcessosAptos().remove(0);
+                            } else {
+                                //Removo o processo que estiver no núcleo
+                                getNúcleos().get(r).setProcesso(null);
                             }
                         }
                         //Processo não terminou de executar
