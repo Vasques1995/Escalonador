@@ -12,6 +12,7 @@ public class Processo implements Comparable<Processo> {
     private Integer tempoTotal;
     private Integer tempoRestante;
     private Integer tempoExecutando = 0;
+    private Integer qtdBytes;
     private boolean novo = false;
 
     public Processo(int id) {
@@ -21,6 +22,8 @@ public class Processo implements Comparable<Processo> {
         this.prioridade = randomPrioridade();
         this.tempoTotal = randomTempoTotal();
         this.tempoRestante = tempoTotal;
+        //Random entre 32 e 1024
+        this.qtdBytes = new Random().nextInt(993) + 32;
     }
 
     private static Prioridade randomPrioridade() {

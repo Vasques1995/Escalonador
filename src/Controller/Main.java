@@ -18,6 +18,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("SO2.fxml"));
         primaryStage.setTitle("Hello JavaFX");
         primaryStage.setScene(new Scene(root, 640, 480));
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
