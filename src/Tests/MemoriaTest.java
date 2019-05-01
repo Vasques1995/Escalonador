@@ -19,6 +19,8 @@ public class MemoriaTest {
         Particão a = mem.getParticãobyId(3);
         Particão b = mem.getParticãobyId(4);
 
+//        Processo prop = new Processo()
+
         mem.mergeParticao(a, b);
         System.out.println("\n");
         System.out.println(mem);
