@@ -45,9 +45,10 @@
       </HBox>
       <ToolBar style="-fx-background-color: &quot;720d5d&quot;;">
         <items>
-          <Button fx:id="btnNovoProcesso" mnemonicParsing="false" onAction="#addP?rocesso" style="-fx-background-color: &quot;720d5d&quot;;" text="ADICIONAR PROCESSO" textFill="WHITE">
+            <Button fx:id="btnNovoProcesso" mnemonicParsing="false" onAction="#addP?rocesso"
+                    style="-fx-background-color: &quot;720d5d&quot;;" text="ADICIONAR PROCESSO" textFill="WHITE">
                <font>
-                  <Font name="Roboto Bold" size="12.0" />
+                   <Font name="Roboto Bold" size="12.0"/>
                </font>
                <effect>
                   <DropShadow blurType="GAUSSIAN" color="#00000098" height="1.0" offsetX="-1.0" offsetY="1.0" radius="0.0" spread="0.1" width="0.0" />
