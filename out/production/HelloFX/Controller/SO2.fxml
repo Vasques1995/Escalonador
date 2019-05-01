@@ -61,7 +61,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </ToolBar>
-      <TitledPane fx:id="paneNucleos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Núcleos" VBox.vgrow="ALWAYS">
+      <TitledPane fx:id="paneNucleos" maxWidth="1.7976931348623157E308" text="Núcleos" VBox.vgrow="ALWAYS">
          <content>
             <TableView fx:id="tableMasterNucleos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="359.0" prefWidth="640.0">
                <columns>
@@ -83,7 +83,7 @@
             </TableView>
          </content>
       </TitledPane>
-      <TitledPane fx:id="paneAptos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Aptos" VBox.vgrow="ALWAYS">
+      <TitledPane fx:id="paneAptos" maxWidth="1.7976931348623157E308" text="Aptos" VBox.vgrow="ALWAYS">
          <content>
             <TableView fx:id="tableMasterAptos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="359.0" prefWidth="640.0">
                <columns>
