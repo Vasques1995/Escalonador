@@ -1,6 +1,5 @@
 package Model;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -61,7 +60,7 @@ public class Processador extends TimerTask {
         }
     }
 
-    //Todo ID gerado é baseado no maior ID presente na table, é possível melhorar???
+    //    Todo ID gerado é baseado no maior ID presente na table, é possível melhorar???
     public int getMaiorId() {
         int auxiliar = 0;
         for (Processo processo : getTodosProcessos()) {

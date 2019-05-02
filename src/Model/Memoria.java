@@ -1,22 +1,13 @@
 package Model;
 
 import java.util.ArrayList;
-//import java.util.Timer;
-//import java.util.TimerTask;
 
 public class Memoria
-//        extends TimerTask
 {
     private Integer tamanhoTotal;
     private Integer tamanhoLivre;
-    private ArrayList<Particão> particoes = new ArrayList<>();
+    protected ArrayList<Particão> particoes = new ArrayList<>();
 
-//    TimerTask memTempo = new TimerTask() {
-//        @Override
-//        public void run() {
-//            System.out.println("ok");
-//        }
-//    };
 
     public Memoria(Integer tamanhoTotal) {
         this.tamanhoTotal = tamanhoTotal;
@@ -93,6 +84,16 @@ public class Memoria
 
     }
 
+    public void addProcessCriaParticao(Processo processo) {
+        Particão pp = new Particão(processo.getQtdBytes());
+        particoes.add(pp);
+        addProcessoNaParticao(processo, pp);
+    }
+
+    public ArrayList<Particão> getParticoes() {
+        return particoes;
+    }
+
     public Integer getTamanhoTotal() {
         return tamanhoTotal;
     }
@@ -116,15 +117,6 @@ public class Memoria
             }
         }
     }
-
-
-//    @Override
-//    synchronized public void run() {
-//
-//    }
-
-
-
     @Override
     public String toString() {
         return "Memoria{" +

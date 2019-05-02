@@ -133,6 +133,24 @@ public class Controller2 implements Initializable {
     @FXML
     private TableColumn<Processo, String> tableColunaDescrTerm;
 
+    @FXML
+    private TitledPane paneMemoria;
+
+    @FXML
+    private TableView<?> tableMasterMemoria;
+
+    @FXML
+    private TableColumn<?, ?> tableColunaIDMemoria;
+
+    @FXML
+    private TableColumn<?, ?> tableColunaSpace;
+
+    @FXML
+    private TableColumn<?, ?> tableColunaSpaceTotal;
+
+    @FXML
+    private TableColumn<?, ?> tableColunaSpaceUsado;
+
     //Lista do TableView de procesos nos núcleos
     ObservableList<Processo> processosNucleo;
     //Lista do TableView de procesos aptos

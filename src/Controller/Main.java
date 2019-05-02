@@ -1,15 +1,10 @@
 package Controller;
 
-import Model.Processo;
-import Model.SJF;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class Main extends Application {
 
@@ -18,6 +13,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("SO2.fxml"));
         primaryStage.setTitle("Hello JavaFX");
         primaryStage.setScene(new Scene(root, 640, 480));
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
