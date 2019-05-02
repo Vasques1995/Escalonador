@@ -1,11 +1,12 @@
 package Model;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Processador extends TimerTask {
+    Memory memória;
     ArrayList<Núcleo> núcleos;
     private int quantum;
     ArrayList<Processo> processosAptos = new ArrayList<>();
@@ -18,6 +19,20 @@ public class Processador extends TimerTask {
         public void run() {
             for (Núcleo nucleo : núcleos) {
                 if (nucleo != null && nucleo.processo != null && nucleo.processo.getTempoRestante() > 0) {
+                    //TODO O que é uma requisição dinâmica, é um processo pedindo mais memória
+                    //TODO Desalocar o processo da memória, aumentar tamanho requerido e tentar alocar?
+                    //TODO Primeiro a condição para ativar a requisição - Chançe de 1/20
+                    if (new Random().nextInt(20) + 1 == 20){
+                        //Checa se é possível alocar o processo com o novo tamanho
+                        memória.desalocar(nucleo.processo);
+                        nucleo.processo.setQtdBytes(nucleo.processo.getQtdBytes() + new Random().nextInt(101));
+                        if (!memória.alocarBestFit(nucleo.processo)){
+                            //TODO Caso não seja possível alocar o processo com o novo tamanho é preciso abortar e retirar do núcleo
+                            nucleo.processo.setStatus(Status.ABORTADO);
+                            processosTerminados.add(nucleo.getProcesso());
+                            nucleo.setProcesso(null);
+                        }
+                    }
                     //Tira um segundo do tempo restante de execução
                     nucleo.getProcesso().setTempoRestante(nucleo.processo.getTempoRestante() - 1);
                     //Adiciona um segundo ao tempo em que ele já foi executado
@@ -33,7 +48,15 @@ public class Processador extends TimerTask {
         }
     };
 
-    Processador(int nNúcleos, int nProcessos, int quantum) {
+    public Memory getMemória() {
+        return memória;
+    }
+
+    public void setMemória(Memory memória) {
+        this.memória = memória;
+    }
+
+    Processador(int nNúcleos, int nProcessos, int quantum, int tamMemory) {
         núcleos = new ArrayList<>(nNúcleos);
         //Inicializa os núcleos
         for (int r = 0; r < nNúcleos; r++) {
@@ -44,11 +67,13 @@ public class Processador extends TimerTask {
         //Gera os processos aleatórios
         geradorProcesso(nProcessos);
         //Run Forrest, RUN!
+        memória = new Memory(tamMemory);
         run();
     }
 
     @Override
     synchronized public void run() {
+        //TODO Rever
         //Passagem de tempo dentro do núcleo
         Timer timer = new Timer();
         timer.schedule(passaTempo, 1000, 1000);

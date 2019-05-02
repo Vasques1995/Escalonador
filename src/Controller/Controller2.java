@@ -38,6 +38,12 @@ public class Controller2 implements Initializable {
     private TextField textQuantum;
 
     @FXML
+    private ComboBox<?> comboBoxMemoria;
+
+    @FXML
+    private TextField textTamMemoria;
+
+    @FXML
     private Button btnIniciar;
 
     @FXML
@@ -74,6 +80,9 @@ public class Controller2 implements Initializable {
     private TableColumn<Processo, String> tableColunaDescrNucleos;
 
     @FXML
+    private TableColumn<Processo, Integer> tableColunaEspaçoNucleos;
+
+    @FXML
     private TitledPane paneAptos;
 
     @FXML
@@ -102,6 +111,9 @@ public class Controller2 implements Initializable {
 
     @FXML
     private TableColumn<Processo, String> tableColunaDescrAptos;
+
+    @FXML
+    private TableColumn<Processo, Integer> tableColunaEspaçoAptos;
 
     @FXML
     private TitledPane paneTerminados;
@@ -134,22 +146,28 @@ public class Controller2 implements Initializable {
     private TableColumn<Processo, String> tableColunaDescrTerm;
 
     @FXML
+    private TableColumn<Processo, Integer> tableColunaEspaçoTerminados;
+
+    @FXML
     private TitledPane paneMemoria;
 
     @FXML
-    private TableView<?> tableMasterMemoria;
+    private TableView<Bloco> tableMasterMemoria;
 
     @FXML
-    private TableColumn<?, ?> tableColunaIDMemoria;
+    private TableColumn<Bloco, Integer> tableColunaIDMemoria;
 
     @FXML
-    private TableColumn<?, ?> tableColunaSpace;
+    private TableColumn<Bloco, ?> tableColunaSpace;
 
     @FXML
-    private TableColumn<?, ?> tableColunaSpaceTotal;
+    private TableColumn<Bloco, Integer> tableColunaSpaceTotal;
 
     @FXML
-    private TableColumn<?, ?> tableColunaSpaceUsado;
+    private TableColumn<Bloco, Integer> tableColunaSpaceUsado;
+
+    @FXML
+    private TableColumn<Processo, Integer> tableColunaIDProcesso;
 
     //Lista do TableView de procesos nos núcleos
     ObservableList<Processo> processosNucleo;
@@ -157,6 +175,8 @@ public class Controller2 implements Initializable {
     ObservableList<Processo> processosAptos;
     //Lista do TableView de processos terminados
     ObservableList<Processo> processosTerminados;
+    //Lista do TableView de Blocos da Memória
+    ObservableList<Bloco> blocosMemoria;
 
     //Processador
     Processador processador;
@@ -166,9 +186,9 @@ public class Controller2 implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        comboBoxAlgoritmo.
         //Desabilitar o Quantum caso o algoritmo selecionado seja o SJF
         textQuantum.disableProperty().bind((comboBoxAlgoritmo.valueProperty().isNull()).or(Bindings.createBooleanBinding(() -> comboBoxAlgoritmo.valueProperty().getValue().equals("SJF"), comboBoxAlgoritmo.valueProperty())));
+        //TODO Desabilitar botão de iniciar caso nem todos os inputs tenham sido preenchidos
         //Aceitando somente números
         //TODO Validação de verdade
         textProcessadores.setTextFormatter(new TextFormatter<>(change -> {
@@ -184,6 +204,10 @@ public class Controller2 implements Initializable {
             change.setText(change.getText().replaceAll("[^0-9]", ""));
             return change;
         }));
+        textTamMemoria.setTextFormatter(new TextFormatter<>(change -> {
+            change.setText(change.getText().replaceAll("[^0-9]", ""));
+            return change;
+        }));
 
         //Configurando TableCell Núcleos
         tableColunaNomeNucleos.setCellValueFactory(new PropertyValueFactory<Processo, String>("Nome"));
@@ -193,6 +217,7 @@ public class Controller2 implements Initializable {
         tableColunaExecTotalNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoTotal"));
         tableColunaExecRestanteNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoRestante"));
         tableColunaDescrNucleos.setCellValueFactory(new PropertyValueFactory<Processo, String>("Descrição"));
+        tableColunaEspaçoNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytes"));
         //Configurando TableCell processos aptos
         tableColunaNomeAptos.setCellValueFactory(new PropertyValueFactory<Processo, String>("Nome"));
         tableColunaPIDAptos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("Id"));
@@ -201,6 +226,7 @@ public class Controller2 implements Initializable {
         tableColunaExecTotalAptos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoTotal"));
         tableColunaExecRestanteAptos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoRestante"));
         tableColunaDescrAptos.setCellValueFactory(new PropertyValueFactory<Processo, String>("Descrição"));
+        tableColunaEspaçoAptos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytes"));
         //Configurando TableCell processos terminados
         tableColunaNomeTerm.setCellValueFactory(new PropertyValueFactory<Processo, String>("Nome"));
         tableColunaPIDTerm.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("Id"));
@@ -209,21 +235,28 @@ public class Controller2 implements Initializable {
         tableColunaExecTotalTerm.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoTotal"));
         tableColunaExecRestanteTerm.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoRestante"));
         tableColunaDescrTerm.setCellValueFactory(new PropertyValueFactory<Processo, String>("Descrição"));
+        tableColunaEspaçoTerminados.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytes"));
+        //Configurando TableCell blocos
+        tableColunaIDMemoria.setCellValueFactory(new PropertyValueFactory<Bloco, Integer>("Identificador"));
+        tableColunaSpaceTotal.setCellValueFactory(new PropertyValueFactory<Bloco, Integer>("EspaçoTotal"));
+        tableColunaSpaceUsado.setCellValueFactory(new PropertyValueFactory<Bloco, Integer>("EspaçoUsado"));
         //Timer atualizador do tableview, 1s em 1s
         tableAtualizador = new Timer();
     }
 
     public void igniteEmul(ActionEvent actionEvent) {
         String algoritmo = comboBoxAlgoritmo.getValue().toString();
+        int tamMemoria = Integer.parseInt(textTamMemoria.getText());
+        System.out.println("DEBUG\nTamanho da Memória: " +  tamMemoria + "\nAlgoritmo de memória: " + comboBoxMemoria.getValue().toString());
         switch (algoritmo) {
             case "SJF":
-                processador = new SJF(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), 0);
+                processador = new SJF(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), 0, tamMemoria);
                 break;
             case "Round Robin":
-                processador = new RR(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()));
+                processador = new RR(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()), tamMemoria);
                 break;
             case "Fila de Prioridade":
-                processador = new FilaPrioridade(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()));
+//                processador = new FilaPrioridade(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText(), Integer.parseInt(tamMemoria)));
                 break;
         }
         //Bindando lista de processos contidos no núcleo a TableView dos núcleos
@@ -235,6 +268,9 @@ public class Controller2 implements Initializable {
         //Bindando lista de processos contidos no núcleo a TableView dos terminados
         processosTerminados = FXCollections.observableArrayList(processador.getProcessosTerminados());
         tableMasterTerminados.setItems(processosTerminados);
+        //Bindando lista de blocos da memória
+        blocosMemoria = FXCollections.observableArrayList(processador.getMemória().getBlocos());
+        tableMasterMemoria.setItems(blocosMemoria);
 
         //Inicializando atualizador da tabela
         tableAtualizador.schedule(new TimerTask() {
@@ -252,6 +288,10 @@ public class Controller2 implements Initializable {
                 processosTerminados = FXCollections.observableArrayList(processador.getProcessosTerminados());
                 tableMasterTerminados.setItems(processosTerminados);
                 tableMasterTerminados.refresh();
+
+                blocosMemoria = FXCollections.observableArrayList(processador.getMemória().getBlocos());
+                tableMasterMemoria.setItems(blocosMemoria);
+                tableMasterMemoria.refresh();
 
             }
         }, 1000, 100);

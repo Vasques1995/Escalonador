@@ -117,13 +117,13 @@ public class Controller implements Initializable {
         String algoritmo = comboBoxAlgoritmo.getValue().toString();
         switch (algoritmo) {
             case "SJF":
-                processador = new SJF(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), 0);
+//                processador = new SJF(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), 0);
                 break;
             case "Round Robin":
-                processador = new RR(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()));
+//                processador = new RR(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()));
                 break;
             case "Fila de Prioridade":
-                processador = new FilaPrioridade(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()));
+//                processador = new FilaPrioridade(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()));
                 break;
         }
         //Bindando lista de processos do processador a tableView

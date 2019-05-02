@@ -1,5 +1,7 @@
 package Model;
 
+import javafx.beans.Observable;
+
 import static Model.Status.EXECUTANDO;
 
 class Núcleo {

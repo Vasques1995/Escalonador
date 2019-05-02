@@ -26,6 +26,14 @@ public class Processo implements Comparable<Processo> {
         this.qtdBytes = new Random().nextInt(993) + 32;
     }
 
+    public Integer getQtdBytes() {
+        return qtdBytes;
+    }
+
+    public void setQtdBytes(Integer qtdBytes) {
+        this.qtdBytes = qtdBytes;
+    }
+
     private static Prioridade randomPrioridade() {
         int randomica = new Random().nextInt(3) + 1;
         switch (randomica) {

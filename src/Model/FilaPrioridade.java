@@ -4,8 +4,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class FilaPrioridade extends Processador {
-    public FilaPrioridade(int nNúcleos, int nProcessos, int quantum) {
-        super(nNúcleos, nProcessos, quantum);
+    public FilaPrioridade(int nNúcleos, int nProcessos, int quantum, int tamMemoria) {
+        super(nNúcleos, nProcessos, quantum, tamMemoria);
     }
 
     Prioridade controle = Prioridade.ALTA;

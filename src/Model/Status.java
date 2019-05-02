@@ -5,5 +5,5 @@ public enum Status {
     //Esperando: Está na fila de aptos, mas não está em execução
     //Executando: Está sendo ativamente executado pelo processador
     //Morto: Já terminou de ser executado
-    PRONTO, ESPERANDO, EXECUTANDO, TERMINADO;
+    PRONTO, ESPERANDO, EXECUTANDO, TERMINADO, ABORTADO;
 }

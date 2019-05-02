@@ -1,10 +1,10 @@
 package Model;
 
 public class Bloco {
-    int identificador;
-    int espaçoTotal;
-    int espaçoUsado;
-    Bloco nextBloco;
+    Integer identificador;
+    Integer espaçoTotal;
+    Integer espaçoUsado;
+    Integer idProcesso;
 
 
     public Bloco(int identificador, int espaçoTotal, int espaçoUsado) {
@@ -13,14 +13,11 @@ public class Bloco {
         this.espaçoUsado = espaçoUsado;
     }
 
-    public Bloco(int identificador, int espaçoTotal, int espaçoUsado, Bloco nextBloco) {
+    public Bloco(Integer identificador, Integer espaçoTotal, Integer espaçoUsado, Integer idProcesso) {
         this.identificador = identificador;
         this.espaçoTotal = espaçoTotal;
         this.espaçoUsado = espaçoUsado;
-        this.nextBloco = nextBloco;
-    }
-
-    public Bloco() {
+        this.idProcesso = idProcesso;
     }
 
     boolean isOcupado() {
@@ -29,35 +26,39 @@ public class Bloco {
         return false;
     }
 
-    public int getIdentificador() {
+    public Integer getIdentificador() {
         return identificador;
     }
 
-    public void setIdentificador(int identificador) {
+    public void setIdentificador(Integer identificador) {
         this.identificador = identificador;
     }
 
-    public int getEspaçoTotal() {
+    public Integer getEspaçoTotal() {
         return espaçoTotal;
     }
 
-    public void setEspaçoTotal(int espaçoTotal) {
+    public void setEspaçoTotal(Integer espaçoTotal) {
         this.espaçoTotal = espaçoTotal;
     }
 
-    public int getEspaçoUsado() {
+    public Integer getEspaçoUsado() {
         return espaçoUsado;
     }
 
-    public void setEspaçoUsado(int espaçoUsado) {
+    public void setEspaçoUsado(Integer espaçoUsado) {
         this.espaçoUsado = espaçoUsado;
     }
 
-    public Bloco getNextBloco() {
-        return nextBloco;
+    public Integer getIdProcesso() {
+        return idProcesso;
     }
 
-    public void setNextBloco(Bloco nextBloco) {
-        this.nextBloco = nextBloco;
+    public void setIdProcesso(Integer idProcesso) {
+        this.idProcesso = idProcesso;
+    }
+
+    int getEspaçoLivre(){
+        return espaçoTotal - espaçoUsado;
     }
 }
