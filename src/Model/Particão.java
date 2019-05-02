@@ -1,19 +1,19 @@
 package Model;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Particão {
     private Integer tamanho;
-    private Integer id;
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private int id;
     private Boolean uso;
     private Processo processo;
 
 
-    public Particão(Integer tamanho, Integer id) {
-        this.tamanho = tamanho;
-        this.id = id;
-    }
-
     public Particão(Integer tamanho) {
         this.tamanho = tamanho;
+        id = count.getAndIncrement();
+
     }
 
     public Integer getTamanho() {

@@ -18,6 +18,7 @@ public class SJF extends Processador {
         preencherNucleos();
     }
 
+    MF mf = new MF(500);
 
     private void ordenarAptos() {
         Collections.sort(getProcessosAptos());
@@ -30,6 +31,7 @@ public class SJF extends Processador {
             getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
             //Remove o dito processo da fila de aptos
             getProcessosAptos().remove(0);
+
         }
     }
 

@@ -27,6 +27,8 @@ public class Processador extends TimerTask {
                     //Caso o processo tenha terminado altera o status e adiciona na lista de processos terminados
                     nucleo.getProcesso().setStatus(Status.TERMINADO);
                     processosTerminados.add(nucleo.getProcesso());
+
+
                 }
             }
         }

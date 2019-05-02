@@ -5,6 +5,8 @@ public class MF extends Memoria {
 
     public MF(Integer tamanhoTotal) {
         super(tamanhoTotal);
+        Particão ppt = new Particão(tamanhoTotal);
+        particoes.add(ppt);
     }
 
     public void findToMerge() {
@@ -25,7 +27,6 @@ public class MF extends Memoria {
             }
         }
     }
-
 
 
 }

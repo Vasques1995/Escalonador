@@ -6,54 +6,31 @@ public class Memoria
 {
     private Integer tamanhoTotal;
     private Integer tamanhoLivre;
+    private Integer tamanhoMaximo;
     protected ArrayList<Particão> particoes = new ArrayList<>();
-
 
     public Memoria(Integer tamanhoTotal) {
         this.tamanhoTotal = tamanhoTotal;
-        this.tamanhoLivre = tamanhoTotal;
-    }
+        tamanhoLivre = tamanhoTotal;
+        tamanhoMaximo = 0;
 
-    public Particão getParticãobyId(int id) {
-        for (Particão particao : particoes) {
-            if (particao.getId() == id) {
-                return particao;
-            }
-        }
-        return null;
+
     }
 
 
     public void addParticão(int tamanho) {
-        if (tamanho <= tamanhoLivre) {
+        if (tamanho <= tamanhoMaximo) {
             Particão part = new Particão(tamanho);
             this.particoes.add(part);
-            tamanhoLivre -= tamanho;
+            tamanhoMaximo += tamanho;
         } else {
-            System.out.println("Erro limite da memoria");
-        }
-    }
-
-    public void addParticão(int tamanho, int id) {
-        if (tamanho <= tamanhoLivre) {
-            Particão part = new Particão(tamanho, id);
-            this.particoes.add(part);
-            tamanhoLivre -= tamanho;
-        } else {
-            System.out.println("Erro limite da memoria");
-        }
-    }
-
-    public void removeParticãobyId(int id) {
-        for (Particão particao : particoes) {
-            if (particao.getId() == id) {
-                particoes.remove(particao);
-            }
+            System.out.println("Error, Limite de partições na memoria");
         }
     }
 
 
     public void removeParticão(Particão particão) {
+        tamanhoMaximo -= particão.getTamanho();
         particoes.remove(particão);
     }
 
@@ -65,29 +42,53 @@ public class Memoria
 
     }
 
+    public void unMergeParticao(Particão a, int size) {
+        changeSizeofParticão(a, a.getTamanho() - size);
+        int x = particoes.indexOf(a);
+
+        particoes.add(x + 1, new Particão(size));
+
+    }
+
     public void addProcessoNaParticao(Processo processo, Particão particão) {
 
         for (Particão parti : particoes) {
             if (particão == parti) {
                 parti.setProcesso(processo);
+                tamanhoLivre -= processo.getQtdBytes();
             }
         }
 
     }
 
     public void removeProcessoDaParticao(Particão particão) {
+
+        addProcessoNaParticao(null, particão);
+
+    }
+
+    public void removeProcessoDaParticao(Processo processo) {
         for (Particão parti : particoes) {
-            if (particão == parti) {
+            if (parti.getProcesso() == processo) {
+                tamanhoLivre += parti.getProcesso().getQtdBytes();
                 parti.setProcesso(null);
+
             }
         }
 
     }
 
     public void addProcessCriaParticao(Processo processo) {
-        Particão pp = new Particão(processo.getQtdBytes());
-        particoes.add(pp);
-        addProcessoNaParticao(processo, pp);
+        if (processo.getQtdBytes() <= tamanhoMaximo && processo.getQtdBytes() <= tamanhoLivre) {
+            Particão pp = new Particão(processo.getQtdBytes());
+            particoes.add(pp);
+            addProcessoNaParticao(processo, pp);
+
+
+            tamanhoMaximo += processo.getQtdBytes();
+            tamanhoLivre += processo.getQtdBytes();
+        }
+
     }
 
     public ArrayList<Particão> getParticoes() {
