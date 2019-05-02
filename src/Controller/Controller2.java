@@ -294,12 +294,12 @@ public class Controller2 implements Initializable {
                 tableMasterMemoria.refresh();
 
             }
-        }, 1000, 100);
+        }, 1000, 300);
     }
 
     public void addProcesso(ActionEvent actionEvent) {
-        //TODO Problema - Dependendo da situação duplica a presença nos blocos
-
+        //TODO Problema - Dependendo da situação duplica a presença nos blocos - Provavelmente relacionado ao fato dos núcleos estarem vazios
+        //TODO Melhorar ID processo
         int idProcesso = processador.getMaiorId() + 1;
         Processo novo = new Processo(idProcesso);
         novo.setNovo(true);

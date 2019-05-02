@@ -14,10 +14,11 @@ public class Memory extends LinkedList<Bloco> {
         this.espaçoLivre = tamanhoTotalMemory;
         this.algoritmo = algoritmoMemoria;
     }
+
     //TODO Generalizar classe memória para best-fit / merge-fit
     //TODO Best-Fit
     boolean alocar(Processo processo) {
-        if (algoritmo.equals("Best-Fit")){
+        if (algoritmo.equals("Best-Fit")) {
             int idBlocoAuxiliar = 0;
             int diferençaEspaço = 100000;
             int espaçoRequerido = processo.getQtdBytes();
@@ -53,12 +54,13 @@ public class Memory extends LinkedList<Bloco> {
                         }
                     }
                 }
-                if (getBloco(idBlocoAuxiliar).espaçoTotal >= espaçoRequerido){
+                if (getBloco(idBlocoAuxiliar).espaçoTotal >= espaçoRequerido) {
                     getBloco(idBlocoAuxiliar).idProcesso = processo.getId();
                     getBloco(idBlocoAuxiliar).espaçoUsado = espaçoRequerido;
                     return true;
-                }
-                else {
+                } else {
+                    //TODO Colocar lógica de setar status aqui?
+                    processo.setStatus(Status.ABORTADO);
                     //Não foi possível alocar o processo
                     return false;
                     //TODO Abortar processo / Retornar falso?
@@ -84,7 +86,7 @@ public class Memory extends LinkedList<Bloco> {
     public ArrayList<Bloco> getBlocos() {
         ArrayList<Bloco> listaBlocos = new ArrayList<>();
         listaBlocos.addAll(this);
-//        System.out.println("Tamanho do ArrayList retornado pelo getBlocos:" + listaBlocos.size() + "\nTamanho da Memória: " + this.size() + "\nTamanho de espaço livre da memória: " + espaçoLivre);
+        System.out.println("Tamanho do ArrayList retornado pelo getBlocos:" + listaBlocos.size() + "\nTamanho da Memória: " + this.size() + "\nTamanho de espaço livre da memória: " + espaçoLivre);
         return listaBlocos;
     }
 
@@ -95,5 +97,24 @@ public class Memory extends LinkedList<Bloco> {
                 auxiliar = get(r);
         }
         return auxiliar;
+    }
+
+    public int containsProcesso(Processo processo) {
+        int auxiliar = -1;
+        for (int r = 0; r < size(); r++) {
+            if (get(r).idProcesso.equals(processo.getId())) {
+                auxiliar = processo.getId();
+            }
+        }
+        return auxiliar;
+    }
+
+    @Override
+    public String toString() {
+        String test = new String();
+        for (Bloco bloco: this) {
+            test+="\nBloco: " + bloco.identificador + " ProcessoID: " + bloco.idProcesso;
+        }
+        return test;
     }
 }

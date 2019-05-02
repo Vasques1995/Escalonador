@@ -25,12 +25,12 @@ public class Processador extends TimerTask {
                     nucleo.getProcesso().incrementarTempo(1);
                     //TODO O que é uma requisição dinâmica, é um processo pedindo mais memória
                     //TODO Desalocar o processo da memória, aumentar tamanho requerido e tentar alocar?
-                    //TODO Primeiro a condição para ativar a requisição - Chançe de 1/20
-                    if (new Random().nextInt(20) + 1 == 20){
+                    //TODO Primeiro a condição para ativar a requisição - Chançe de 1/30
+                    if (new Random().nextInt(30) + 1 == 30) {
                         //Checa se é possível alocar o processo com o novo tamanho
                         memória.desalocar(nucleo.processo);
                         nucleo.processo.setQtdBytes(nucleo.processo.getQtdBytes() + new Random().nextInt(101));
-                        if (!memória.alocar(nucleo.processo)){
+                        if (!memória.alocar(nucleo.processo)) {
                             //TODO Caso não seja possível alocar o processo com o novo tamanho é preciso abortar e retirar do núcleo
                             nucleo.processo.setStatus(Status.ABORTADO);
                             processosTerminados.add(nucleo.getProcesso());
@@ -128,14 +128,18 @@ public class Processador extends TimerTask {
     }
 
     public void addNovoProcesso(Processo processoNovo) {
-        //TODO Problema, novos processos não são checados imediatamente com relação a memória
-        if (memória.alocar(processoNovo)){
+        //TODO Problema: Ao usar o alocar na memória e jogar
+        //TODO Solução - Criar uma MemoryAuxiliar
+        Memory dummy = new Memory(memória.tamanhoTotalMemory, memória.algoritmo);
+        dummy.espaçoLivre = memória.espaçoLivre;
+        dummy.addAll(memória);
+//        if (dummy.alocar(processoNovo)){
             processosAptos.add(processoNovo);
-        }
-        else {
-            processoNovo.setStatus(Status.ABORTADO);
-            processosTerminados.add(processoNovo);
-        }
+//        }
+//        else {
+//            processoNovo.setStatus(Status.ABORTADO);
+//            processosTerminados.add(processoNovo);
+//        }
     }
 
     int getQuantum() {

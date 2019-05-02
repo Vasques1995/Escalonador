@@ -37,7 +37,6 @@ public class SJF extends Processador {
                 getProcessosAptos().get(0).setStatus(Status.ABORTADO);
                 processosTerminados.add(getProcessosAptos().get(0));
                 getProcessosAptos().remove(0);
-//            }
             }
         }
     }
@@ -81,12 +80,17 @@ public class SJF extends Processador {
                         }
                     } else {
                         if (getProcessosAptos().size() != 0) {
-                            //Preenche com o primeiro processo na lista de aptos
-                            getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
-                            //Aloca o processo na memória
-                            memória.alocar(getNúcleos().get(r).processo);
-                            //Remove o dito processo da lista de aptos
-                            getProcessosAptos().remove(0);
+                            //TODO Núcleo vazio, lista de aptos preenchida.
+                            if (memória.alocar(getProcessosAptos().get(0))) {
+                                //Preenche com o primeiro processo na lista de aptos
+                                getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
+                                //Remove o dito processo da lista de aptos
+                                getProcessosAptos().remove(0);
+                            } else {
+                                getProcessosAptos().get(0).setStatus(Status.ABORTADO);
+                                processosTerminados.add(getProcessosAptos().get(0));
+                                getProcessosAptos().remove(0);
+                            }
                         }
 //                        //Caso o núcleo esteja vazio, preenche com o primeiro processo na lista de aptos
 //                        getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
