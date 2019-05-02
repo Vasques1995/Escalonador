@@ -247,13 +247,13 @@ public class Controller2 implements Initializable {
     public void igniteEmul(ActionEvent actionEvent) {
         String algoritmo = comboBoxAlgoritmo.getValue().toString();
         int tamMemoria = Integer.parseInt(textTamMemoria.getText());
-        System.out.println("DEBUG\nTamanho da Memória: " +  tamMemoria + "\nAlgoritmo de memória: " + comboBoxMemoria.getValue().toString());
+//        System.out.println("DEBUG\nTamanho da Memória: " +  tamMemoria + "\nAlgoritmo de memória: " + comboBoxMemoria.getValue().toString());
         switch (algoritmo) {
             case "SJF":
-                processador = new SJF(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), 0, tamMemoria);
+                processador = new SJF(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), 0, tamMemoria, comboBoxMemoria.getValue().toString());
                 break;
             case "Round Robin":
-                processador = new RR(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()), tamMemoria);
+                processador = new RR(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()), tamMemoria, comboBoxMemoria.getValue().toString());
                 break;
             case "Fila de Prioridade":
 //                processador = new FilaPrioridade(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText(), Integer.parseInt(tamMemoria)));
@@ -298,6 +298,8 @@ public class Controller2 implements Initializable {
     }
 
     public void addProcesso(ActionEvent actionEvent) {
+        //TODO Problema - Dependendo da situação duplica a presença nos blocos
+
         int idProcesso = processador.getMaiorId() + 1;
         Processo novo = new Processo(idProcesso);
         novo.setNovo(true);

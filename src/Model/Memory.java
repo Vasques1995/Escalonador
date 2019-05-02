@@ -7,59 +7,67 @@ import java.util.LinkedList;
 public class Memory extends LinkedList<Bloco> {
     int tamanhoTotalMemory;
     int espaçoLivre;
+    String algoritmo;
 
-    public Memory(int tamanhoTotalMemory) {
+    public Memory(int tamanhoTotalMemory, String algoritmoMemoria) {
         this.tamanhoTotalMemory = tamanhoTotalMemory;
         this.espaçoLivre = tamanhoTotalMemory;
+        this.algoritmo = algoritmoMemoria;
     }
     //TODO Generalizar classe memória para best-fit / merge-fit
     //TODO Best-Fit
-    boolean alocarBestFit(Processo processo) {
-        int idBlocoAuxiliar = 0;
-        int diferençaEspaço = 100000;
-        int espaçoRequerido = processo.getQtdBytes();
+    boolean alocar(Processo processo) {
+        if (algoritmo.equals("Best-Fit")){
+            int idBlocoAuxiliar = 0;
+            int diferençaEspaço = 100000;
+            int espaçoRequerido = processo.getQtdBytes();
 
-        //Caso ainda exista espaço livre para criar um bloco
-        if (processo.getQtdBytes() <= espaçoLivre) {
-            //Crio um bloco
-            Bloco novoBloco = new Bloco(size(), processo.getQtdBytes(), processo.getQtdBytes(), processo.getId());
-            //Adiciono o bloco na memoria
-            add(novoBloco);
-            //Reduzo o espaço livre da memória
-            espaçoLivre -= processo.getQtdBytes();
-            return true;
-        }
-        //Caso não exista espaço livre para criar mais blocos
-        else {
-            //Procuro em todos os blocos pelo que possuam espaço livre mais próximo da requisição
-            for (int r = 0; r < size(); r++) {
-                //Caso o espaço livre do bloco seja igual ao espaço requerido
-                if (get(r).getEspaçoLivre() == espaçoRequerido) {
-                    get(r).idProcesso = processo.getId();
-                    get(r).espaçoUsado = espaçoRequerido;
-                    return true;
-                } else {
-                    //O espaço livre do bloco é maior que o espaço requerido
-                    if (get(r).getEspaçoLivre() > espaçoRequerido) {
-                        //Caso a diferença de espaço livre entre o bloco e o espaço requerido do processo seja menor que a auxiliar
-                        if (get(r).getEspaçoLivre() - espaçoRequerido <= diferençaEspaço) {
-                            //Atualizo as auxiliares
-                            diferençaEspaço = get(r).getEspaçoLivre() - espaçoRequerido;
-                            idBlocoAuxiliar = get(r).identificador;
+            //Caso ainda exista espaço livre para criar um bloco
+            if (processo.getQtdBytes() <= espaçoLivre) {
+                //Crio um bloco
+                Bloco novoBloco = new Bloco(size(), processo.getQtdBytes(), processo.getQtdBytes(), processo.getId());
+                //Adiciono o bloco na memoria
+                add(novoBloco);
+                //Reduzo o espaço livre da memória
+                espaçoLivre -= processo.getQtdBytes();
+                return true;
+            }
+            //Caso não exista espaço livre para criar mais blocos
+            else {
+                //Procuro em todos os blocos pelo que possuam espaço livre mais próximo da requisição
+                for (int r = 0; r < size(); r++) {
+                    //Caso o espaço livre do bloco seja igual ao espaço requerido
+                    if (get(r).getEspaçoLivre() == espaçoRequerido) {
+                        get(r).idProcesso = processo.getId();
+                        get(r).espaçoUsado = espaçoRequerido;
+                        return true;
+                    } else {
+                        //O espaço livre do bloco é maior que o espaço requerido
+                        if (get(r).getEspaçoLivre() > espaçoRequerido) {
+                            //Caso a diferença de espaço livre entre o bloco e o espaço requerido do processo seja menor que a auxiliar
+                            if (get(r).getEspaçoLivre() - espaçoRequerido <= diferençaEspaço) {
+                                //Atualizo as auxiliares
+                                diferençaEspaço = get(r).getEspaçoLivre() - espaçoRequerido;
+                                idBlocoAuxiliar = get(r).identificador;
+                            }
                         }
                     }
                 }
+                if (getBloco(idBlocoAuxiliar).espaçoTotal >= espaçoRequerido){
+                    getBloco(idBlocoAuxiliar).idProcesso = processo.getId();
+                    getBloco(idBlocoAuxiliar).espaçoUsado = espaçoRequerido;
+                    return true;
+                }
+                else {
+                    //Não foi possível alocar o processo
+                    return false;
+                    //TODO Abortar processo / Retornar falso?
+                }
             }
-            if (getBloco(idBlocoAuxiliar).espaçoTotal >= espaçoRequerido){
-                getBloco(idBlocoAuxiliar).idProcesso = processo.getId();
-                getBloco(idBlocoAuxiliar).espaçoUsado = espaçoRequerido;
-                return true;
-            }
-            else {
-                //Não foi possível alocar o processo
-                return false;
-                //TODO Abortar processo / Retornar falso?
-            }
+        }
+        //TODO Merge-Fit
+        else {
+            return false;
         }
     }
 

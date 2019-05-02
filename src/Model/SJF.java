@@ -6,8 +6,8 @@ import java.util.TimerTask;
 
 public class SJF extends Processador {
 
-    public SJF(int nNúcleos, int nProcessos, int quantum, int tamMemoria) {
-        super(nNúcleos, nProcessos, quantum, tamMemoria);
+    public SJF(int nNúcleos, int nProcessos, int quantum, int tamMemoria, String algoritmoMemoria) {
+        super(nNúcleos, nProcessos, quantum, tamMemoria, algoritmoMemoria);
         ordenarAptos();
         preencherNucleos();
     }
@@ -26,13 +26,19 @@ public class SJF extends Processador {
     //TODO É melhor deixar essa lógica na thread
     private void preencherNucleos() {
         for (int r = 0; r < getNúcleos().size(); r++) {
-            //Adiciona o primeiro processo da fila de aptos no núcleo
-            getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
-            //Aloca o processo na memória
-            //TODO Checar algoritmo de memória escolhido
-            memória.alocarBestFit(getNúcleos().get(r).processo);
-            //Remove o dito processo da fila de aptos
-            getProcessosAptos().remove(0);
+            //Checa se é possível adicionar o processo no núcleo
+            if (memória.alocar(getProcessosAptos().get(0))) {
+                //Adiciona o primeiro processo da fila de aptos no núcleo
+                getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
+                //Remove o dito processo da fila de aptos
+                getProcessosAptos().remove(0);
+            } else {
+                //Remover da fila de aptos, setar para abortar e adicionar na fila de terminados
+                getProcessosAptos().get(0).setStatus(Status.ABORTADO);
+                processosTerminados.add(getProcessosAptos().get(0));
+                getProcessosAptos().remove(0);
+//            }
+            }
         }
     }
 
@@ -54,7 +60,7 @@ public class SJF extends Processador {
                             //Ainda tem processos nos aptos
                             if (getProcessosAptos().size() != 0) {
                                 //Caso seja possível alocar o processo
-                                if (memória.alocarBestFit(getProcessosAptos().get(0))) {
+                                if (memória.alocar(getProcessosAptos().get(0))) {
                                     //Preenche com o primeiro processo na lista de aptos
                                     getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
                                     //Remove o dito processo da lista de aptos
@@ -78,7 +84,7 @@ public class SJF extends Processador {
                             //Preenche com o primeiro processo na lista de aptos
                             getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));
                             //Aloca o processo na memória
-                            memória.alocarBestFit(getNúcleos().get(r).processo);
+                            memória.alocar(getNúcleos().get(r).processo);
                             //Remove o dito processo da lista de aptos
                             getProcessosAptos().remove(0);
                         }

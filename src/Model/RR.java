@@ -4,8 +4,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class RR extends Processador {
-    public RR(int nNúcleos, int nProcessos, int quantum, int tamMemoria) {
-        super(nNúcleos, nProcessos, quantum, tamMemoria);
+    public RR(int nNúcleos, int nProcessos, int quantum, int tamMemoria, String algoritmoMemoria) {
+        super(nNúcleos, nProcessos, quantum, tamMemoria, algoritmoMemoria);
     }
 
     //TODO É melhor deixar essa lógica na thread

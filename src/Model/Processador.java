@@ -19,6 +19,10 @@ public class Processador extends TimerTask {
         public void run() {
             for (Núcleo nucleo : núcleos) {
                 if (nucleo != null && nucleo.processo != null && nucleo.processo.getTempoRestante() > 0) {
+                    //Tira um segundo do tempo restante de execução
+                    nucleo.getProcesso().setTempoRestante(nucleo.processo.getTempoRestante() - 1);
+                    //Adiciona um segundo ao tempo em que ele já foi executado
+                    nucleo.getProcesso().incrementarTempo(1);
                     //TODO O que é uma requisição dinâmica, é um processo pedindo mais memória
                     //TODO Desalocar o processo da memória, aumentar tamanho requerido e tentar alocar?
                     //TODO Primeiro a condição para ativar a requisição - Chançe de 1/20
@@ -26,17 +30,13 @@ public class Processador extends TimerTask {
                         //Checa se é possível alocar o processo com o novo tamanho
                         memória.desalocar(nucleo.processo);
                         nucleo.processo.setQtdBytes(nucleo.processo.getQtdBytes() + new Random().nextInt(101));
-                        if (!memória.alocarBestFit(nucleo.processo)){
+                        if (!memória.alocar(nucleo.processo)){
                             //TODO Caso não seja possível alocar o processo com o novo tamanho é preciso abortar e retirar do núcleo
                             nucleo.processo.setStatus(Status.ABORTADO);
                             processosTerminados.add(nucleo.getProcesso());
                             nucleo.setProcesso(null);
                         }
                     }
-                    //Tira um segundo do tempo restante de execução
-                    nucleo.getProcesso().setTempoRestante(nucleo.processo.getTempoRestante() - 1);
-                    //Adiciona um segundo ao tempo em que ele já foi executado
-                    nucleo.getProcesso().incrementarTempo(1);
                 }
                 //TODO Melhorar lógica de processos terminados
                 if (nucleo != null && nucleo.processo != null && nucleo.processo.getTempoRestante() <= 0) {
@@ -56,7 +56,7 @@ public class Processador extends TimerTask {
         this.memória = memória;
     }
 
-    Processador(int nNúcleos, int nProcessos, int quantum, int tamMemory) {
+    Processador(int nNúcleos, int nProcessos, int quantum, int tamMemory, String algoritmo) {
         núcleos = new ArrayList<>(nNúcleos);
         //Inicializa os núcleos
         for (int r = 0; r < nNúcleos; r++) {
@@ -67,7 +67,7 @@ public class Processador extends TimerTask {
         //Gera os processos aleatórios
         geradorProcesso(nProcessos);
         //Run Forrest, RUN!
-        memória = new Memory(tamMemory);
+        memória = new Memory(tamMemory, algoritmo);
         run();
     }
 
@@ -128,7 +128,14 @@ public class Processador extends TimerTask {
     }
 
     public void addNovoProcesso(Processo processoNovo) {
-        processosAptos.add(processoNovo);
+        //TODO Problema, novos processos não são checados imediatamente com relação a memória
+        if (memória.alocar(processoNovo)){
+            processosAptos.add(processoNovo);
+        }
+        else {
+            processoNovo.setStatus(Status.ABORTADO);
+            processosTerminados.add(processoNovo);
+        }
     }
 
     int getQuantum() {
