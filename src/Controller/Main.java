@@ -15,7 +15,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("SO2.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("SO3.fxml"));
         primaryStage.setTitle("Hello JavaFX");
         primaryStage.setScene(new Scene(root, 640, 480));
         primaryStage.setMaximized(true);

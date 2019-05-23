@@ -50,6 +50,8 @@ public class SJF extends Processador {
             public void run() {
                 ordenarAptos();
                 for (int r = 0; r < getNúcleos().size(); r++) {
+                    //TODO Problema do SJF, quando múltiplos núcleos( >= 3) estão sendo utilizados a alocação não funciona corretamente
+                    //TODO Aparece um erro Timer-O NPE
                     //Checa se o núcleo está preenchido
                     if (getNúcleos().get(r).getProcesso() != null) {
                         //Checa se o processo acabou
@@ -80,7 +82,6 @@ public class SJF extends Processador {
                         }
                     } else {
                         if (getProcessosAptos().size() != 0) {
-                            //TODO Núcleo vazio, lista de aptos preenchida.
                             if (memória.alocar(getProcessosAptos().get(0))) {
                                 //Preenche com o primeiro processo na lista de aptos
                                 getNúcleos().get(r).setProcesso(getProcessosAptos().get(0));

@@ -29,7 +29,7 @@ public class Processador extends TimerTask {
                     if (new Random().nextInt(30) + 1 == 30) {
                         //Checa se é possível alocar o processo com o novo tamanho
                         memória.desalocar(nucleo.processo);
-                        nucleo.processo.setQtdBytes(nucleo.processo.getQtdBytes() + new Random().nextInt(101));
+                        nucleo.processo.setQtdBytesTotal(nucleo.processo.getQtdBytesTotal() + new Random().nextInt(101));
                         if (!memória.alocar(nucleo.processo)) {
                             //TODO Caso não seja possível alocar o processo com o novo tamanho é preciso abortar e retirar do núcleo
                             nucleo.processo.setStatus(Status.ABORTADO);

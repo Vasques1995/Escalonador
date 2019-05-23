@@ -68,6 +68,15 @@ public class Controller2 implements Initializable {
     private TableColumn<Processo, Prioridade> tableColunaPrioridadeNucleos;
 
     @FXML
+    private TableColumn<Processo, Integer> tableColunaEspaçoNucleos;
+
+    @FXML
+    private TableColumn<Processo, Integer> tableColunaEspaçoOriginalNucleos;
+
+    @FXML
+    private TableColumn<Processo, Integer> tableColunaEspaçoTotalNucleos;
+
+    @FXML
     private TableColumn<Processo, ?> tableColunaExecNucleos;
 
     @FXML
@@ -78,9 +87,6 @@ public class Controller2 implements Initializable {
 
     @FXML
     private TableColumn<Processo, String> tableColunaDescrNucleos;
-
-    @FXML
-    private TableColumn<Processo, Integer> tableColunaEspaçoNucleos;
 
     @FXML
     private TitledPane paneAptos;
@@ -101,6 +107,9 @@ public class Controller2 implements Initializable {
     private TableColumn<Processo, Prioridade> tableColunaPrioridadeAptos;
 
     @FXML
+    private TableColumn<Processo, Integer> tableColunaEspaçoAptos;
+
+    @FXML
     private TableColumn<Processo, ?> tableColunaExecAptos;
 
     @FXML
@@ -111,9 +120,6 @@ public class Controller2 implements Initializable {
 
     @FXML
     private TableColumn<Processo, String> tableColunaDescrAptos;
-
-    @FXML
-    private TableColumn<Processo, Integer> tableColunaEspaçoAptos;
 
     @FXML
     private TitledPane paneTerminados;
@@ -134,6 +140,12 @@ public class Controller2 implements Initializable {
     private TableColumn<Processo, Prioridade> tableColunaPrioridadeTerm;
 
     @FXML
+    private TableColumn<Processo, Integer> tableColunaEspaçoOriginalTerm;
+
+    @FXML
+    private TableColumn<Processo, Integer> tableColunaEspaçoTotalTerm;
+
+    @FXML
     private TableColumn<Processo, ?> tableColunaExecTerm;
 
     @FXML
@@ -144,9 +156,6 @@ public class Controller2 implements Initializable {
 
     @FXML
     private TableColumn<Processo, String> tableColunaDescrTerm;
-
-    @FXML
-    private TableColumn<Processo, Integer> tableColunaEspaçoTerminados;
 
     @FXML
     private TitledPane paneMemoria;
@@ -167,7 +176,7 @@ public class Controller2 implements Initializable {
     private TableColumn<Bloco, Integer> tableColunaSpaceUsado;
 
     @FXML
-    private TableColumn<Processo, Integer> tableColunaIDProcesso;
+    private TableColumn<Bloco, Integer> tableColunaIDProcesso;
 
     //Lista do TableView de procesos nos núcleos
     ObservableList<Processo> processosNucleo;
@@ -214,32 +223,35 @@ public class Controller2 implements Initializable {
         tableColunaPIDNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("Id"));
         tableColunaStatusNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Status>("Status"));
         tableColunaPrioridadeNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Prioridade>("Prioridade"));
+        tableColunaEspaçoTotalNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytesTotal"));
+        tableColunaEspaçoOriginalNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytesOriginal"));
         tableColunaExecTotalNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoTotal"));
         tableColunaExecRestanteNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoRestante"));
         tableColunaDescrNucleos.setCellValueFactory(new PropertyValueFactory<Processo, String>("Descrição"));
-        tableColunaEspaçoNucleos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytes"));
         //Configurando TableCell processos aptos
         tableColunaNomeAptos.setCellValueFactory(new PropertyValueFactory<Processo, String>("Nome"));
         tableColunaPIDAptos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("Id"));
         tableColunaStatusAptos.setCellValueFactory(new PropertyValueFactory<Processo, Status>("Status"));
         tableColunaPrioridadeAptos.setCellValueFactory(new PropertyValueFactory<Processo, Prioridade>("Prioridade"));
+        tableColunaEspaçoAptos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytesOriginal"));
         tableColunaExecTotalAptos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoTotal"));
         tableColunaExecRestanteAptos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoRestante"));
         tableColunaDescrAptos.setCellValueFactory(new PropertyValueFactory<Processo, String>("Descrição"));
-        tableColunaEspaçoAptos.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytes"));
         //Configurando TableCell processos terminados
         tableColunaNomeTerm.setCellValueFactory(new PropertyValueFactory<Processo, String>("Nome"));
         tableColunaPIDTerm.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("Id"));
         tableColunaStatusTerm.setCellValueFactory(new PropertyValueFactory<Processo, Status>("Status"));
         tableColunaPrioridadeTerm.setCellValueFactory(new PropertyValueFactory<Processo, Prioridade>("Prioridade"));
+        tableColunaEspaçoTotalTerm.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytesTotal"));
+        tableColunaEspaçoOriginalTerm.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytesOriginal"));
         tableColunaExecTotalTerm.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoTotal"));
         tableColunaExecRestanteTerm.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("TempoRestante"));
         tableColunaDescrTerm.setCellValueFactory(new PropertyValueFactory<Processo, String>("Descrição"));
-        tableColunaEspaçoTerminados.setCellValueFactory(new PropertyValueFactory<Processo, Integer>("QtdBytes"));
         //Configurando TableCell blocos
         tableColunaIDMemoria.setCellValueFactory(new PropertyValueFactory<Bloco, Integer>("Identificador"));
         tableColunaSpaceTotal.setCellValueFactory(new PropertyValueFactory<Bloco, Integer>("EspaçoTotal"));
         tableColunaSpaceUsado.setCellValueFactory(new PropertyValueFactory<Bloco, Integer>("EspaçoUsado"));
+        tableColunaIDProcesso.setCellValueFactory(new PropertyValueFactory<Bloco, Integer>("IdProcesso"));
         //Timer atualizador do tableview, 1s em 1s
         tableAtualizador = new Timer();
     }
@@ -256,7 +268,7 @@ public class Controller2 implements Initializable {
                 processador = new RR(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()), tamMemoria, comboBoxMemoria.getValue().toString());
                 break;
             case "Fila de Prioridade":
-//                processador = new FilaPrioridade(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText(), Integer.parseInt(tamMemoria)));
+                processador = new FilaPrioridade(Integer.parseInt(textProcessadores.getText()), Integer.parseInt(textProcessos.getText()), Integer.parseInt(textQuantum.getText()), tamMemoria, comboBoxMemoria.getValue().toString());
                 break;
         }
         //Bindando lista de processos contidos no núcleo a TableView dos núcleos
@@ -277,6 +289,7 @@ public class Controller2 implements Initializable {
             @Override
             public void run() {
                 //TODO Extrair esse código daqui
+                //TODO Em mundo ideal não precisaria do refresh, porém as listas não estão sendo bem observadas TLDR: Descartar Refresh
                 processosNucleo = FXCollections.observableArrayList(processador.getProcessosNucleo());
                 tableMasterNucleos.setItems(processosNucleo);
                 tableMasterNucleos.refresh();
@@ -292,7 +305,6 @@ public class Controller2 implements Initializable {
                 blocosMemoria = FXCollections.observableArrayList(processador.getMemória().getBlocos());
                 tableMasterMemoria.setItems(blocosMemoria);
                 tableMasterMemoria.refresh();
-
             }
         }, 1000, 300);
     }

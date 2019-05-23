@@ -12,8 +12,17 @@ public class Processo implements Comparable<Processo> {
     private Integer tempoTotal;
     private Integer tempoRestante;
     private Integer tempoExecutando = 0;
-    private Integer qtdBytes;
+    private Integer qtdBytesTotal;
+    private Integer qtdBytesOriginal;
     private boolean novo = false;
+
+    public Integer getQtdBytesOriginal() {
+        return qtdBytesOriginal;
+    }
+
+    public void setQtdBytesOriginal(Integer qtdBytesOriginal) {
+        this.qtdBytesOriginal = qtdBytesOriginal;
+    }
 
     public Processo(int id) {
         this.id = id;
@@ -23,15 +32,16 @@ public class Processo implements Comparable<Processo> {
         this.tempoTotal = randomTempoTotal();
         this.tempoRestante = tempoTotal;
         //Random entre 32 e 1024
-        this.qtdBytes = new Random().nextInt(993) + 32;
+        this.qtdBytesTotal = new Random().nextInt(993) + 32;
+        this.qtdBytesOriginal = qtdBytesTotal;
     }
 
-    public Integer getQtdBytes() {
-        return qtdBytes;
+    public Integer getQtdBytesTotal() {
+        return qtdBytesTotal;
     }
 
-    public void setQtdBytes(Integer qtdBytes) {
-        this.qtdBytes = qtdBytes;
+    public void setQtdBytesTotal(Integer qtdBytesTotal) {
+        this.qtdBytesTotal = qtdBytesTotal;
     }
 
     private static Prioridade randomPrioridade() {

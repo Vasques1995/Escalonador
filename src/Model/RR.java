@@ -57,7 +57,7 @@ public class RR extends Processador {
                             }
                         }
                     }
-                    //Caso o nucleo não esteja vazio
+                    //Caso o nucleo esteja preenchido
                     else {
                         //Checa se o processo já terminou de executar
                         if (getNúcleos().get(r).processo.getTempoRestante() <= 0) {

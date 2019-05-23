@@ -151,6 +151,7 @@
                                 <TableColumn fx:id="tableColunaSpaceUsado" prefWidth="75.0" text="USADO" />
                             </columns>
                         </TableColumn>
+                  <TableColumn fx:id="tableColunaIDProcesso" prefWidth="75.0" text="ID PROCESSO" />
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

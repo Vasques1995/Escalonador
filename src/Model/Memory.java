@@ -1,7 +1,6 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.LinkedList;
 
 public class Memory extends LinkedList<Bloco> {
@@ -21,16 +20,16 @@ public class Memory extends LinkedList<Bloco> {
         if (algoritmo.equals("Best-Fit")) {
             int idBlocoAuxiliar = 0;
             int diferençaEspaço = 100000;
-            int espaçoRequerido = processo.getQtdBytes();
+            int espaçoRequerido = processo.getQtdBytesTotal();
 
             //Caso ainda exista espaço livre para criar um bloco
-            if (processo.getQtdBytes() <= espaçoLivre) {
+            if (processo.getQtdBytesTotal() <= espaçoLivre) {
                 //Crio um bloco
-                Bloco novoBloco = new Bloco(size(), processo.getQtdBytes(), processo.getQtdBytes(), processo.getId());
+                Bloco novoBloco = new Bloco(size(), processo.getQtdBytesTotal(), processo.getQtdBytesTotal(), processo.getId());
                 //Adiciono o bloco na memoria
                 add(novoBloco);
                 //Reduzo o espaço livre da memória
-                espaçoLivre -= processo.getQtdBytes();
+                espaçoLivre -= processo.getQtdBytesTotal();
                 return true;
             }
             //Caso não exista espaço livre para criar mais blocos
@@ -69,8 +68,64 @@ public class Memory extends LinkedList<Bloco> {
         }
         //TODO Merge-Fit
         else {
-            return false;
+            int idBlocoAuxiliar = 0;
+//            int diferençaEspaço = 100000;
+            int espaçoRequerido = processo.getQtdBytesTotal();
+
+            if (size() <= 0) {
+
+                Bloco primordial = new Bloco(size(), tamanhoTotalMemory, 0, 0);
+                //Adiciono o bloco na memoria
+                add(primordial);
+            }
+
+            if (size() > 1) {
+
+                for (Bloco bloco : this) {
+                    if (bloco.getIdentificador() == getFirst().getIdentificador() && bloco.getEspaçoUsado() == 0) {
+
+
+                        if (get(1).getEspaçoUsado() == 0) {
+                            mergeBloco(bloco, get(1));
+                        }
+
+
+                    } else if (bloco.getIdentificador() == getLast().getIdentificador() && bloco.getEspaçoUsado() == 0) {
+
+                        int x = indexOf(bloco);
+
+                        if (get(x - 1).getEspaçoUsado() == 0) {
+                            mergeBloco(bloco, get(x - 1));
+                        }
+
+                    } else if (bloco.getEspaçoUsado() == 0) {
+                        int y = indexOf(bloco);
+
+                        if (get(y - 1).getEspaçoUsado() == 0) {
+                            mergeBloco(bloco, get(y - 1));
+                        } else if (get(y + 1).getEspaçoUsado() == 0) {
+                            mergeBloco(bloco, get(y + 1));
+                        }
+                    }
+                }
+
+
+            }
+
+
+            if (processo.getQtdBytesTotal() <= espaçoLivre && processo != null) {
+                //Crio um bloco
+                int index_k = unMergeBloco(getBloco(0), espaçoRequerido);
+
+                get(index_k).idProcesso = processo.getId();
+                get(index_k).espaçoUsado = espaçoRequerido;
+                //Reduzo o espaço livre da memória
+                espaçoLivre -= processo.getQtdBytesTotal();
+                return true;
+            }//Caso não exista espaço livre para criar mais blocos
+
         }
+        return false;
     }
 
     void desalocar(Processo processo) {
@@ -79,6 +134,7 @@ public class Memory extends LinkedList<Bloco> {
             if (get(r).idProcesso == processo.getId()) {
                 //TODO Marcar o bloco como livre
                 get(r).espaçoUsado = 0;
+                get(r).idProcesso = -1;
             }
         }
     }
@@ -112,9 +168,34 @@ public class Memory extends LinkedList<Bloco> {
     @Override
     public String toString() {
         String test = new String();
-        for (Bloco bloco: this) {
-            test+="\nBloco: " + bloco.identificador + " ProcessoID: " + bloco.idProcesso;
+        for (Bloco bloco : this) {
+            test += "\nBloco: " + bloco.identificador + " ProcessoID: " + bloco.idProcesso;
         }
         return test;
+    }
+
+    public void changeSizeofBloco(Bloco alvo, int tamanho) {
+        for (Bloco bloco : this) {
+            if (bloco == alvo) {
+                bloco.setEspaçoTotal(tamanho);
+            }
+        }
+    }
+
+    public void mergeBloco(Bloco a, Bloco b) {
+
+        changeSizeofBloco(a, a.getEspaçoTotal() + b.getEspaçoTotal());
+        remove(b);
+
+    }
+
+    public int unMergeBloco(Bloco a, int tamanho) {
+        changeSizeofBloco(a, a.getEspaçoTotal() - tamanho);
+        int x = this.indexOf(a);
+
+        this.add(x + 1, new Bloco(size(), tamanho, 0));
+
+        return x+1;
+
     }
 }
